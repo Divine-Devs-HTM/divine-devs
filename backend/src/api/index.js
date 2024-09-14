@@ -1,11 +1,14 @@
-const express = require('express');
+import express from 'express';
+import authRouter from './auth/index.js';
 
-const router = express.Router();
+const apiRouter = express.Router();
 
-router.get('/', (req, res) => {
+apiRouter.get('/', (req, res) => {
   res.json({
     message: "API",
   });
 });
 
-module.exports = router;
+apiRouter.use('/auth', authRouter);
+
+export default apiRouter;
