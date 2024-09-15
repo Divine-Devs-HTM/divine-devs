@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:divine_devs/src/common_widgets/loading_incicator.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:divine_devs/src/common_widgets/custom_dropdown.dart';
@@ -18,6 +19,7 @@ class _ConvertFilePageState extends State<ConvertFilePage> {
   String _selectedFormat = 'JSON';
   File? _file;
   final Dio _dio = Dio();
+  bool _isLoading = false;
 
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles();
@@ -37,9 +39,13 @@ class _ConvertFilePageState extends State<ConvertFilePage> {
       return;
     }
 
+    setState(() {
+      _isLoading = true;
+    });
+
     final formData = FormData.fromMap({
       'file': MultipartFile.fromFileSync(_file!.path),
-      'input_file_type': 'application/json',
+      'input_file_type': _selectedFormat.toLowerCase(),
     });
 
     try {
@@ -53,13 +59,15 @@ class _ConvertFilePageState extends State<ConvertFilePage> {
 
       if (response.statusCode == 200) {
         final directory = await getApplicationDocumentsDirectory();
-        final filePath = '${directory.path}/converted_file.json';
+        final filePath =
+            '${directory.path}/converted_file.${_selectedFormat.toLowerCase()}';
 
         final file = File(filePath);
         await file.writeAsString(response.data);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("File converted and saved successfully")),
+          const SnackBar(
+              content: Text("File converted and saved successfully")),
         );
       } else {
         throw Exception('Failed to convert file');
@@ -68,6 +76,10 @@ class _ConvertFilePageState extends State<ConvertFilePage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: $e")),
       );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -151,12 +163,15 @@ class _ConvertFilePageState extends State<ConvertFilePage> {
             const SizedBox(
               height: 20.0,
             ),
-            ThemeButton(
-              name: "Convert File",
-              textColor: ColorSys.kwhite,
-              buttonColor: ColorSys.ksecondary,
-              onPressed: _convertFile,
-            ),
+            if (_isLoading)
+              const LoadingIndicator()
+            else
+              ThemeButton(
+                name: "Convert File",
+                textColor: ColorSys.kwhite,
+                buttonColor: ColorSys.ksecondary,
+                onPressed: _convertFile,
+              ),
           ],
         ),
       ),

@@ -18,8 +18,19 @@ class AuthenticationBloc
   void _authLoginRequested(event, emit) async {
     try {
       emit(AuthLoading());
-      final response =
-          await http.get(Uri.parse('http://localhost:9000/api/v1/auth/login'));
+      final String email = event.email;
+      final String password = event.password;
+
+      final response = await http.post(
+        Uri.parse('http://localhost:9000/api/v1/auth/login'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

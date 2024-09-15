@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:divine_devs/src/common_widgets/alerts.dart';
+import 'package:divine_devs/src/common_widgets/loading_incicator.dart';
 import 'package:divine_devs/src/common_widgets/theme_button.dart';
 import 'package:divine_devs/src/common_widgets/theme_textfield.dart';
 import 'package:divine_devs/src/utils/colors_sys.dart';
@@ -112,12 +113,14 @@ class _DownloadFilePageState extends State<DownloadFilePage> {
               passwordField: false,
             ),
             const SizedBox(height: 20.0),
-            ThemeButton(
-              name: "Download File",
-              onPressed: () async {
-                _downloadFile();
-              },
-            ),
+            _isLoading
+                ? const LoadingIndicator()
+                : ThemeButton(
+                    name: "Download File",
+                    onPressed: () async {
+                      _downloadFile();
+                    },
+                  ),
             const SizedBox(height: 20.0),
             Text(
               _statusMessage,

@@ -1,6 +1,5 @@
 import 'package:divine_devs/main.dart';
 import 'package:divine_devs/src/features/authentication/signin.dart';
-import 'package:divine_devs/src/features/home/home.dart';
 import 'package:divine_devs/src/features/onboarding/onboarding.dart';
 import 'package:divine_devs/src/utils/colors_sys.dart';
 import 'package:divine_devs/src/utils/strings.dart';
@@ -25,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) =>
-              onBoard == 0 ? const Home() : const Onboarding()));
+              onBoard == 0 ? const SignIn() : const Onboarding()));
     });
     super.initState();
   }
