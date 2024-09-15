@@ -44,13 +44,9 @@ For instance, if a user named Alex needs to analyze data from a set of documents
 
 ### Backend
 
-- **MERN Stack:** 
-  - **MongoDB:** For database management.
-  - **Express.js:** For server-side logic.
-  - **React.js:** For building the frontend part of the backend.
-  - **Node.js:** For backend development.
-
-- **Amazon Textract:** For extracting text and table data from documents.
+- **MongoDB:** For database management.
+- **Express.js:** For server-side logic.
+- **Node.js:** For backend development.
 
 ### Machine Learning
 
@@ -135,7 +131,6 @@ For detailed deployment instructions, refer to the following:
 
 - **React Documentation:** [React Docs](https://reactjs.org/docs/getting-started.html)
 - **Flutter Documentation:** [Flutter Docs](https://flutter.dev/docs)
-- **Amazon Textract Documentation:** [Textract Docs](https://docs.aws.amazon.com/textract/latest/dg/what-is.html)
 - **Tailwind CSS Documentation:** [Tailwind Docs](https://tailwindcss.com/docs)
 
 ---
@@ -199,7 +194,7 @@ Here are some screenshots of the ParsePal mobile application:
 
 - **Akarsh Jain:** [GitHub](https://github.com/akarsh-jain-790) | [LinkedIn](https://www.linkedin.com/in/akarsh-jain/)
 - **Tanmay Sagwal:** [GitHub](https://github.com/Tanmay41) | [LinkedIn](https://www.linkedin.com/in/tanmaysagwal/)
-- **R. Aditya:** [GitHub](https://github.com/adityarags) | [LinkedIn](https://www.linkedin.com/in/adityarags/)
+- **Aditya Rags:** [GitHub](https://github.com/adityarags) | [LinkedIn](https://www.linkedin.com/in/adityarags/)
 - **Avishi Mittal:** [GitHub](https://github.com/a-wishie) | [LinkedIn](https://www.linkedin.com/in/avishi14/)
 
 ---
