@@ -1,3 +1,6 @@
+import jwt from 'jsonwebtoken';
+import User from './model/user.js';
+
 export function notFound(req, res, next) {
   res.status(404);
   const error = new Error(`🔍 - Not Found - ${req.originalUrl}`);
@@ -14,8 +17,3 @@ export function errorHandler(err, req, res, next) {
     stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack,
   });
 }
-
-// module.exports = {
-//   notFound,
-//   errorHandler,
-// };

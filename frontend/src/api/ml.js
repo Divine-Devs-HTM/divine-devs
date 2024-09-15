@@ -1,0 +1,43 @@
+export async function uploadFile(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await fetch('http://localhost:5001/api/ml/v1/upload', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        throw error;
+    }
+}
+
+export async function initiateChat(fileId, message) {
+    const response = await fetch(`http://localhost:5001/api/ml/v1/chat`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            document_id: fileId,
+            current_message: message
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+}

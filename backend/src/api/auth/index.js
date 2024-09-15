@@ -11,12 +11,12 @@ authRouter.post('/register', async (req, res) => {
 
         const existingUsername = await User.findOne({ username });
         if (existingUsername) {
-            return res.status(400).json({ success: false, message: 'Username is already taken' });
+            return res.status(200).json({ success: false, message: 'Username is already taken' });
         }
 
         const existingEmail = await User.findOne({ email });
         if (existingEmail) {
-            return res.status(400).json({ success: false, message: 'Email is already registered' });
+            return res.status(200).json({ success: false, message: 'Email is already registered' });
         }
 
         const saltRounds = 10;
@@ -29,14 +29,14 @@ authRouter.post('/register', async (req, res) => {
             { expiresIn: '30d' }
         );
 
-        res.status(201).json({ 
+        res.status(200).json({ 
             success: true,
             message: 'User registered successfully', 
             userId: user._id,
             token: token
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error registering user', error: error.message });
+        res.status(200).json({ success: false, message: 'Error registering user', error: error.message });
     }
 });
 
@@ -45,12 +45,12 @@ authRouter.post('/login', async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ success: false, message: 'Invalid email or password' });
+            return res.status(200).json({ success: false, message: 'Invalid email or password' });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ success: false, message: 'Invalid email or password' });
+            return res.status(200).json({ success: false, message: 'Invalid email or password' });
         }
 
         const token = jwt.sign(
@@ -71,27 +71,40 @@ authRouter.post('/login', async (req, res) => {
             userId: user._id
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error logging in user', error: error.message });
+        res.status(200).json({ success: false, message: 'Error logging in user', error: error.message });
     }
 });
 
-authRouter.get('/loggedin', (req, res) => {
+authRouter.get('/loggedin', async (req, res) => {
     const token = req.cookies && req.cookies.token;
-    console.log("token", token);
-    console.log(req);
     if (!token) {
-        console.log("no token");
-        return res.status(401).json({ success: false, message: 'Unauthorized' });
+        console.log('No token found');
+        return res.status(200).json({ success: false, message: 'Unauthorized' });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            console.log("error verifying token");
-            return res.status(401).json({ success: false, message: 'Unauthorized' });
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.userId).select('-password');
+        
+        if (!user) {
+            console.log('User not found');
+            return res.status(200).json({ success: false, message: 'User not found' });
         }
-        console.log("token verified");
-        res.status(200).json({ success: true, message: 'User logged in', userId: decoded.userId });
-    });
+
+        res.status(200).json({ 
+            success: true,
+            message: 'User logged in', 
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                avatar: user.avatar
+            }
+        });
+    } catch (error) {
+        console.log('Error getting logged in user', error);
+        res.status(200).json({ success: false, message: 'Unauthorized' });
+    }
 });
 
 authRouter.post('/logout', (req, res) => {

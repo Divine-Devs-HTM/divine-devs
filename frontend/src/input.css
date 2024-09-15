@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Runegifter';
+  src: url('./Runegifter.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@layer base {
+  .rune {
+    font-family: 'Runegifter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .auth-box-shadow {
+    box-shadow: rgba(0, 0, 0, 0.5) 1px 1px;
+  }
+
+  .auth-input-shadow {
+    box-shadow: rgba(0, 0, 0, 0.5) 1px 1px;
+  }
+}
+
