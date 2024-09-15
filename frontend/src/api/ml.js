@@ -22,7 +22,7 @@ export async function uploadFile(file) {
     }
 }
 
-export async function initiateChat(fileId, message) {
+export async function sendMessage(fileId, message) {
     const response = await fetch(`http://localhost:5001/api/ml/v1/chat`, {
         method: 'POST',
         headers: {
