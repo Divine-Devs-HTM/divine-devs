@@ -12,9 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:uuid/uuid.dart';
+import 'package:open_filex/open_filex.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -25,6 +24,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   var uuid = Uuid();
+  int? _fileId; // File ID after successful upload
 
   List<types.Message> _messages = [];
   final _user = const types.User(
@@ -84,86 +84,68 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  void _handleFileSelection() async {
+  Future<void> _handleFileSelection() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.any,
     );
 
     if (result != null && result.files.single.path != null) {
-      final message = types.FileMessage(
-        author: _user,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        id: const Uuid().v4(),
-        mimeType: lookupMimeType(result.files.single.path!),
-        name: result.files.single.name,
-        size: result.files.single.size,
-        uri: result.files.single.path!,
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Uploading file...")),
       );
 
-      _addMessage(message);
-    }
-  }
+      try {
+        final file = File(result.files.single.path!);
+        final formData = FormData.fromMap({
+          'file': MultipartFile.fromFileSync(file.path),
+        });
 
-  void _handleMessageTap(BuildContext _, types.Message message) async {
-    if (message is types.FileMessage) {
-      var localPath = message.uri;
+        final dio = Dio();
+        final response = await dio.post(
+          'http://localhost:5001/api/ml/v1/upload',
+          data: formData,
+        );
 
-      if (message.uri.startsWith('http')) {
-        try {
-          final index =
-              _messages.indexWhere((element) => element.id == message.id);
-          final updatedMessage =
-              (_messages[index] as types.FileMessage).copyWith(
-            isLoading: true,
-          );
-
+        if (response.statusCode == 200) {
+          final fileId = response.data['file_id'];
           setState(() {
-            _messages[index] = updatedMessage;
+            _fileId = fileId;
           });
 
-          final client = http.Client();
-          final request = await client.get(Uri.parse(message.uri));
-          final bytes = request.bodyBytes;
-          final documentsDir = (await getApplicationDocumentsDirectory()).path;
-          localPath = '$documentsDir/${message.name}';
-
-          if (!File(localPath).existsSync()) {
-            final file = File(localPath);
-            await file.writeAsBytes(bytes);
-          }
-        } finally {
-          final index =
-              _messages.indexWhere((element) => element.id == message.id);
-          final updatedMessage =
-              (_messages[index] as types.FileMessage).copyWith(
-            isLoading: null,
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("File uploaded successfully")),
           );
 
-          setState(() {
-            _messages[index] = updatedMessage;
-          });
+          final message = types.FileMessage(
+            author: _user,
+            createdAt: DateTime.now().millisecondsSinceEpoch,
+            id: const Uuid().v4(),
+            mimeType: lookupMimeType(file.path),
+            name: result.files.single.name,
+            size: result.files.single.size,
+            uri: file.path,
+          );
+
+          _addMessage(message);
+        } else {
+          throw Exception('Failed to upload file');
         }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: $e")),
+        );
       }
-
-      await OpenFilex.open(localPath);
     }
-  }
-
-  void _handlePreviewDataFetched(
-    types.TextMessage message,
-    types.PreviewData previewData,
-  ) {
-    final index = _messages.indexWhere((element) => element.id == message.id);
-    final updatedMessage = (_messages[index] as types.TextMessage).copyWith(
-      previewData: previewData,
-    );
-
-    setState(() {
-      _messages[index] = updatedMessage;
-    });
   }
 
   Future<void> _handleSendPressed(types.PartialText message) async {
+    if (_fileId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please upload a file before chatting")),
+      );
+      return;
+    }
+
     final textMessage = types.TextMessage(
       author: _user,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -173,14 +155,13 @@ class _ChatPageState extends State<ChatPage> {
 
     _addMessage(textMessage);
 
-    // Send the message to the LLM
     try {
       final response = await _client.post(
         Uri.parse('http://localhost:5001/api/ml/v1/chat'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'current_message': message.text,
-          'document_id': 123,
+          'document_id': _fileId,
         }),
       );
 
@@ -228,8 +209,6 @@ class _ChatPageState extends State<ChatPage> {
           child: Chat(
             messages: _messages,
             onAttachmentPressed: _handleAttachmentPressed,
-            onMessageTap: _handleMessageTap,
-            onPreviewDataFetched: _handlePreviewDataFetched,
             onSendPressed: _handleSendPressed,
             showUserAvatars: true,
             showUserNames: true,
