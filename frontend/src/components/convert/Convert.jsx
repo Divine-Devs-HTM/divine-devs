@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { uploadFile } from '../../api/ml';
+import { convertFile } from '../../api/ml';
 
 const Convert = () => {
     const [file, setFile] = useState(null);
@@ -20,7 +20,7 @@ const Convert = () => {
             } else if (file.type === 'application/pdf' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
                 fileType = 'pdf';
             }
-            const response = await uploadFile(file, fileType);
+            const response = await convertFile(file, fileType);
             showResponse(response);
         }
     }
