@@ -38,3 +38,19 @@ export async function sendMessage(fileId, message) {
 
     return await response.json();
 }
+
+export async function convertFile(file, fileType) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('input_file_type', fileType);
+    const response = await fetch(`http://localhost:5001/api/ml/v1/convert`, {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+}

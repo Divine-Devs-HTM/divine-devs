@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Convert from './components/convert/Convert';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/home/Home';
@@ -30,6 +31,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/chat" element={<Chat avatar={user?.user?.avatar} />} />
+            <Route path="/convert" element={<Convert />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>

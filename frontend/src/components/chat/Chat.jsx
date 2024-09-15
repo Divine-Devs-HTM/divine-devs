@@ -13,7 +13,7 @@ const Chat = ({ avatar }) => {
     const [currentMessage, setCurrentMessage] = useState('');
     const [file, setFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [fileId, setFileId] = useState(true);
+    const [fileId, setFileId] = useState(null);
 
     const handleUpload = async () => {
         if (file) {
@@ -35,7 +35,7 @@ const Chat = ({ avatar }) => {
             try {
                 const response = await sendMessage(fileId, currentMessage);
                 console.log('Message sent:', response);
-                setChats(prevChats => [...prevChats, { role: 'assistant', content: response.message }]);
+                setChats(prevChats => [...prevChats, { role: 'assistant', content: response.chat_response }]);
             } catch (error) {
                 console.error('Error sending message:', error);
                 alert('Error sending message');
@@ -53,36 +53,38 @@ const Chat = ({ avatar }) => {
     }
 
     return (
-        <div className="bg-[#F6F2BC] h-[86.7vh] overflow-y-auto p-4">
-            {chats.map((chat, index) => {
-                return (
-                    <div key={index} className={`flex flex-col ${chat.role === 'user' ? 'items-end' : 'items-start'} mb-4`}>
-                        <div className={`flex ${chat.role === 'user' ? 'flex-row-reverse' : 'flex-row'} max-w-[70%]`}>
+        <div className="bg-[#F6F2BC] h-[86.7vh] overflow-y-auto p-4 flex flex-col justify-between">
+            <div className="flex-grow overflow-y-auto">
+                {chats.map((chat, index) => {
+                    return (
+                        <div key={index} className={`flex flex-col ${chat.role === 'user' ? 'items-end' : 'items-start'} mb-4`}>
+                            <div className={`flex ${chat.role === 'user' ? 'flex-row-reverse' : 'flex-row'} max-w-[70%]`}>
+                                <div className="w-10 h-10 rounded-full bg-[#F9DE87] flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    {chat.role === 'user' ? 
+                                        <img src={avatar} alt="User Avatar" className="w-full h-full object-cover" /> 
+                                        : 'A'}
+                                </div>
+                                <div className={`${chat.role === 'user' ? 'mr-2 bg-[#9CCFCE]' : 'ml-2 bg-[#F9DE87]'} p-3 rounded-lg`}>
+                                    {chat.content}
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })}
+                {isLoading && (
+                    <div className="flex flex-col items-start mb-4">
+                        <div className="flex flex-row max-w-[70%]">
                             <div className="w-10 h-10 rounded-full bg-[#F9DE87] flex items-center justify-center overflow-hidden flex-shrink-0">
-                                {chat.role === 'user' ? 
-                                    <img src={avatar} alt="User Avatar" className="w-full h-full object-cover" /> 
-                                    : 'A'}
+                                A
                             </div>
-                            <div className={`${chat.role === 'user' ? 'mr-2 bg-[#9CCFCE]' : 'ml-2 bg-[#F9DE87]'} p-3 rounded-lg`}>
-                                {chat.content}
+                            <div className="ml-2 flex items-center bg-[#F9DE87] p-3 rounded-lg">
+                                <ClockLoader color="#49878A" cssOverride={override} size={24} />
+                                <span className="ml-2">Thinking...</span>
                             </div>
                         </div>
                     </div>
-                )
-            })}
-            {isLoading && (
-                <div className="flex flex-col items-start mb-4">
-                    <div className="flex flex-row max-w-[70%]">
-                        <div className="w-10 h-10 rounded-full bg-[#F9DE87] flex items-center justify-center overflow-hidden flex-shrink-0">
-                            A
-                        </div>
-                        <div className="ml-2 flex items-center bg-[#F9DE87] p-3 rounded-lg">
-                            <ClockLoader color="#49878A" cssOverride={override} size={24} />
-                            <span className="ml-2">Thinking...</span>
-                        </div>
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
             <div className="relative mt-4">
                 <input 
                     type="file" 
