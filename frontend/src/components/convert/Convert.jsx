@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { uploadFile } from '../../api/ml';
+import { convertFile } from '../../api/ml';
 
 const Convert = () => {
     const [file, setFile] = useState(null);
-    const [showModal, setShowModal] = useState(true);
+    const [showModal, setShowModal] = useState(false);
     const [response, setResponse] = useState("Loading...");
 
     const onDrop = useCallback((acceptedFiles) => {
@@ -13,14 +13,14 @@ const Convert = () => {
 
     const handleConvert = async () => {
         setShowModal(true);
-        if(file) {
+        if (file) {
             let fileType = '';
             if (file.type.startsWith('image/')) {
                 fileType = 'img';
             } else if (file.type === 'application/pdf' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
                 fileType = 'pdf';
             }
-            const response = await uploadFile(file, fileType);
+            const response = await convertFile(file, fileType);
             showResponse(response);
         }
     }
@@ -45,7 +45,7 @@ const Convert = () => {
         <div className="h-[86.7vh] flex flex-col items-center justify-center">
             <div>
                 <div {...getRootProps()} className={`flex flex-col items-center justify-center h-full border-2 border-black border-dashed w-[500px] h-[230px] rounded-xl ${isDragActive ? 'bg-gray-100' : ''}`}>
-                <input {...getInputProps()} />
+                    <input {...getInputProps()} />
                     <h1 className="text-4xl font-bold">
                         {file ? file.name : 'Upload your file'}
                     </h1>
@@ -67,13 +67,13 @@ const Convert = () => {
                             {JSON.stringify(response, null, 2)}
                         </pre>
                         <div className="flex justify-between mt-4">
-                            <button 
+                            <button
                                 onClick={copyToClipboard}
                                 className="px-4 py-2 bg-[#F9DE87] text-[#9CCFCE] rounded hover:bg-[#F7D46A] transition-colors"
                             >
                                 Copy to Clipboard
                             </button>
-                            <button 
+                            <button
                                 onClick={() => setShowModal(false)}
                                 className="px-4 py-2 bg-[#9CCFCE] text-white rounded hover:bg-[#7BAFAE] transition-colors"
                             >

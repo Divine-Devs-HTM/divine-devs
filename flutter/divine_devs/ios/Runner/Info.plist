@@ -56,5 +56,11 @@
 	</dict>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>We need access to the documents folder to save downloaded files.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need to access your camera to pick images</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need to access your photo library to pick images</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need to access your microphone for recording</string>
 </dict>
 </plist>
