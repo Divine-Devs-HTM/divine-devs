@@ -5,10 +5,7 @@ export async function uploadFile(file) {
     try {
         const response = await fetch('http://localhost:5001/api/ml/v1/upload', {
             method: 'POST',
-            body: formData,
-            headers: {
-                'Accept': 'application/json',
-            },
+            body: formData
         });
 
         if (!response.ok) {

@@ -29,18 +29,20 @@ const Chat = ({ avatar }) => {
 
     const handleMessage = async () => {
         if (fileId && currentMessage) {
-            setChats([...chats, { role: 'user', content: currentMessage }]);
+            const newUserMessage = { role: 'user', content: currentMessage };
+            setChats(prevChats => [...prevChats, newUserMessage]);
             setIsLoading(true);
             try {
                 const response = await sendMessage(fileId, currentMessage);
                 console.log('Message sent:', response);
-                setChats([...chats, { role: 'assistant', content: response.chat_response }]);
+                setChats(prevChats => [...prevChats, { role: 'assistant', content: response.message }]);
             } catch (error) {
                 console.error('Error sending message:', error);
-                setIsLoading(false);
                 alert('Error sending message');
+            } finally {
+                setIsLoading(false);
+                setCurrentMessage('');
             }
-            setIsLoading(false);
         }
     }
 
@@ -85,7 +87,7 @@ const Chat = ({ avatar }) => {
                 <input 
                     type="file" 
                     onChange={(e) => setFile(e.target.files[0])} 
-                    className={"w-full p-3 pr-12 rounded-full bg-[#F9DE87] text-[#49878A] font-bold text-lg auth-input-shadow focus:outline-none " + (fileId ? "hidden" : "")}
+                    className={"w-full relative b-0 p-3 pr-12 rounded-full bg-[#F9DE87] text-[#49878A] font-bold text-lg auth-input-shadow focus:outline-none " + (fileId ? "hidden" : "")}
                 />
                 <input 
                     type="text" 
@@ -93,10 +95,10 @@ const Chat = ({ avatar }) => {
                     onKeyDown={handleKeyPress}
                     placeholder="Ask ParsePal..."
                     value={currentMessage}
-                    className={"w-full p-3 pr-12 rounded-full bg-[#F9DE87] text-[#49878A] font-bold text-lg auth-input-shadow focus:outline-none " + (!fileId ? "hidden" : "")}
+                    className={"w-full relative b-0 p-3 pr-12 rounded-full bg-[#F9DE87] text-[#49878A] font-bold text-lg auth-input-shadow focus:outline-none " + (!fileId ? "hidden" : "")}
                 />
                 <button 
-                    onClick={fileId ? handleMessage : handleUpload}
+                    onClick={fileId != null ? handleMessage : handleUpload}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-[#F9DE87] hover:bg-[#F7D76C] focus:outline-none transition duration-300 ease-in-out"
                 >
                     <svg width="20" height="24" viewBox="0 0 26 32" fill="none" xmlns="http://www.w3.org/2000/svg">

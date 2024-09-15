@@ -2,7 +2,7 @@ import React from 'react';
 
 const Home = () => {
     return (
-        <main className="flex flex-col bg-[#FFF5B6] min-h-[86.7vh] m-0">
+        <main className="flex flex-col bg-white min-h-[86.7vh] m-0">
             <div className="flex-grow px-[15vh] pt-[18vh] rounded-xl">
                 <h1 className="text-5xl rune mb-6 text-[#9CCFCE] [text-shadow:_0_1px_0_rgb(0_0_0_/_40%)]">
                     ParsePal:{' '}
@@ -15,7 +15,7 @@ const Home = () => {
                     text and tables into JSON or CSV. Use our interactive query feature
                     to get specific insights from your documents quickly and easily.
                 </p>
-                <button onClick={() => window.location.href = '/chat'} className="bg-[#F9DE87] mt-6 text-[#49878A] h-20 w-48 p-0 rounded-full text-3xl text-[#E8EDC5] font-bold">
+                <button onClick={() => window.location.href = '/chat'} className="bg-[#9CCFCE] mt-6 text-[#49878A] h-20 w-48 p-0 rounded-full text-3xl text-[#E8EDC5] font-bold">
                     Get Started
                 </button>
             </div>
