@@ -199,7 +199,7 @@ Here are some screenshots of the ParsePal mobile application:
 
 - **Akarsh Jain:** [GitHub](https://github.com/akarsh-jain-790) | [LinkedIn](https://www.linkedin.com/in/akarsh-jain/)
 - **Tanmay Sagwal:** [GitHub](https://github.com/Tanmay41) | [LinkedIn](https://www.linkedin.com/in/tanmaysagwal/)
-- **Aditya Rags:** [GitHub](https://github.com/adityarags) | [LinkedIn](https://www.linkedin.com/in/adityarags/)
+- **R. Aditya:** [GitHub](https://github.com/adityarags) | [LinkedIn](https://www.linkedin.com/in/adityarags/)
 - **Avishi Mittal:** [GitHub](https://github.com/a-wishie) | [LinkedIn](https://www.linkedin.com/in/avishi14/)
 
 ---
