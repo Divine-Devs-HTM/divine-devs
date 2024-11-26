@@ -2,6 +2,10 @@
 
 **ParsePal** is a versatile, cross-platform application designed to streamline the extraction and management of information from documents. It utilizes Amazon Textract for document analysis and is built using a combination of modern technologies to provide a seamless experience on both Android and desktop platforms.
 
+![Slide_16_9_-_1_2](https://github.com/user-attachments/assets/f4229660-dfe2-45a5-a1b4-715c7e5a3d34)
+
+![Slide_16_9_-_2_2](https://github.com/user-attachments/assets/ab601361-0b32-4237-a52f-4b8c708b4a40)
+
 ---
 
 ## Problem Statement
@@ -168,8 +172,6 @@ For detailed deployment instructions, refer to the following:
 
 Here are some screenshots of the ParsePal mobile application:
 
-![Slide_16_9_-_1_2](https://github.com/user-attachments/assets/f4229660-dfe2-45a5-a1b4-715c7e5a3d34)
-
 ![Simulator_Screenshot_-_iPhone_14_-_2024-09-15_at_14 37 24](https://github.com/user-attachments/assets/99436189-6e98-4fdc-8c90-a896fb9cf6e2)
 
 ![Simulator_Screenshot_-_iPhone_14_-_2024-09-15_at_14 35 55](https://github.com/user-attachments/assets/89df1c84-cd34-4076-bbd4-9fdca4d93b69)
@@ -185,8 +187,6 @@ Here are some screenshots of the ParsePal mobile application:
 ![Simulator_Screenshot_-_iPhone_14_-_2024-09-15_at_14 41 48](https://github.com/user-attachments/assets/cb598443-a74a-418b-819a-f13c7a9d97bc)
 
 ![Simulator_Screenshot_-_iPhone_14_-_2024-09-15_at_14 47 35](https://github.com/user-attachments/assets/576ce946-4274-4dc0-ad49-b2db44d1b049)
-
-![Slide_16_9_-_2_2](https://github.com/user-attachments/assets/ab601361-0b32-4237-a52f-4b8c708b4a40)
 
 ---
 
